@@ -1,3 +1,5 @@
-export default function ScalePage() {
-  return <div>Scale Page!</div>;
-}
+import { Hero } from "../_components";
+
+const ScalePage = () => <Hero imgPath="/scale.jpg" imgAlt="steel factory" title="Scale your app to infinity" />;
+
+export default ScalePage;
