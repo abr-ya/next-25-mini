@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
+
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const poppins = Poppins({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Next 15 App + Tailwind + ESLint / Prettier",
@@ -15,9 +20,11 @@ const RootLayout = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => (
-  <html lang="en">
-    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
-  </html>
+  <ClerkProvider>
+    <html lang="en">
+      <body className={`${poppins.variable} antialiased`}>{children}</body>
+    </html>
+  </ClerkProvider>
 );
 
 export default RootLayout;
