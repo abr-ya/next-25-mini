@@ -1,5 +1,5 @@
 import { Breadcrumbs, ICrumb } from "@/app/_components";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/index";
 import { PropsWithChildren } from "react";
 
 interface IPageCard {
