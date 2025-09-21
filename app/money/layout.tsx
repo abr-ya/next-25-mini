@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Navbar } from "./_components";
+import { Header } from "./_components";
+import { Footer } from "../_components";
 
 export const metadata: Metadata = {
   title: "Money Tracker Project",
@@ -8,8 +9,9 @@ export const metadata: Metadata = {
 
 const MoneyLayout = ({ children }: { children: React.ReactNode }) => (
   <>
-    <Navbar />
-    {children}
+    <Header />
+    <main className="flex-1 h-[calc(100vh-100px)]">{children}</main>
+    <Footer />
   </>
 );
 
