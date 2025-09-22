@@ -1,4 +1,4 @@
-import { PageCard } from "@/app/money/_components";
+import { PageCard } from "@/app/money/_components/index";
 
 const NewTransactionPage = () => {
   return (
@@ -10,7 +10,8 @@ const NewTransactionPage = () => {
         { to: null, title: "New Transaction" },
       ]}
     >
-      New Transaction
+      {/* <TransactionFormProvider /> */}
+      todo: TransactionForm
     </PageCard>
   );
 };
