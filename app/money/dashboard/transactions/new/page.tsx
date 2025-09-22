@@ -1,6 +1,17 @@
-import { PageCard } from "@/app/money/_components/index";
+"use client";
+
+import { PageCard, TransactionFormProvider } from "@/app/money/_components/index";
+import { TransactionSchemaType } from "@/app/money/_schemas/transaction-form-schema";
 
 const NewTransactionPage = () => {
+  const categories: string[] = []; // fetch or pass categories as needed
+  const createHandler = async (data: TransactionSchemaType) => {
+    console.log("HANDLE SUBMIT: ", data);
+    // create transaction
+    // toast
+    // redirect
+  };
+
   return (
     <PageCard
       title="New Transaction"
@@ -10,8 +21,7 @@ const NewTransactionPage = () => {
         { to: null, title: "New Transaction" },
       ]}
     >
-      {/* <TransactionFormProvider /> */}
-      todo: TransactionForm
+      <TransactionFormProvider categories={categories} onSubmit={createHandler} />
     </PageCard>
   );
 };

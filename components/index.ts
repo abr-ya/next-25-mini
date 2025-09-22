@@ -1,5 +1,6 @@
 export { Badge, badgeVariants } from "./ui/badge";
 export { Button } from "./ui/button";
+export { Calendar } from "./ui/calendar";
 export * from "./ui/card";
 export { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 export * from "./ui/select";
