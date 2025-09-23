@@ -12,9 +12,14 @@ import {
 import { TransactionForm } from "./transaction-form";
 import { TEST_MODE } from "./transaction-form-contants";
 import { Form } from "@/components/index";
+import { ICategory } from "../../_interfaces/category.interface";
 
-// @ts-expect-error todo: props!
-export const TransactionFormProvider = (props) => {
+interface ITransactionFormProvider {
+  categories: ICategory[];
+  init?: Partial<TransactionSchemaType>;
+}
+
+export const TransactionFormProvider = (props: ITransactionFormProvider) => {
   const formMethods = useForm<TransactionSchemaType>({
     defaultValues: props.init || defaultValues,
     mode: "all",
@@ -22,9 +27,16 @@ export const TransactionFormProvider = (props) => {
     resolver: zodResolver(transactionFormSchema),
   });
 
+  const createHandler = async (data: TransactionSchemaType) => {
+    console.log("HANDLE SUBMIT: ", data);
+    // create transaction
+    // toast
+    // redirect
+  };
+
   return (
     <Form {...formMethods}>
-      <TransactionForm {...props} />
+      <TransactionForm {...props} onSubmit={createHandler} />
       {/* @ts-expect-error todo: fix it!!! */}
       {TEST_MODE ? <DevTool control={formMethods.control} /> : null}
     </Form>
