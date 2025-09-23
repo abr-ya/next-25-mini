@@ -30,24 +30,15 @@ export const TransactionForm = ({ categories, onSubmit }: ITransactionForm) => {
   };
 
   const currentType = watch("transactionType");
-  const isExpense = currentType === "expense";
-
-  const expenseCategories = categories
-    .filter((cat) => cat.type === "expense")
-    .map(({ name, id }) => ({ label: name, value: id.toString() }));
-  const incomeCategories = categories
-    .filter((cat) => cat.type === "income")
+  const preparedCategories = categories
+    .filter((cat) => cat.type === currentType)
     .map(({ name, id }) => ({ label: name, value: id.toString() }));
 
   return (
     <form onSubmit={handleSubmit(submitHandler, errorHandler)}>
       <fieldset disabled={formState.isSubmitting} className="grid grid-cols-2 gap-y-5 gap-x-2">
         <RHFSelect<TransactionSchemaType> label={LABELS.type} name="transactionType" options={TYPES} />
-        {isExpense ? (
-          <RHFSelect<TransactionSchemaType> label={LABELS.category} name="categoryId" options={expenseCategories} />
-        ) : (
-          <RHFSelect<TransactionSchemaType> label={LABELS.category} name="categoryId" options={incomeCategories} />
-        )}
+        <RHFSelect<TransactionSchemaType> label={LABELS.category} name="categoryId" options={preparedCategories} />
         <RHFInput<TransactionSchemaType> label={LABELS.amount} name="amount" type="number" />
         <RHFDatePicker<TransactionSchemaType> label={LABELS.date} name="transactionDate" />
       </fieldset>
