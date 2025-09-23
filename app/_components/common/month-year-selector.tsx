@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { format } from "date-fns";
 
-import { IPeriod } from "@/app/_interfaces/period.interface";
+import { IPeriod } from "@/app/money/_interfaces/period.interface";
 
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../components";
 import { SimpleSelect } from "./simple-select";

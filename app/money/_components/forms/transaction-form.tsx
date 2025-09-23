@@ -5,14 +5,15 @@ import { RHFDatePicker, RHFInput, RHFSelect } from "./fields";
 
 import { TransactionSchemaType } from "../../_schemas/transaction-form-schema";
 import { Button } from "@/components/index";
+import { ICategory } from "../../_interfaces/category.interface";
 
 interface ITransactionForm {
-  // categories: (typeof categoriesTable.$inferSelect)[];
+  categories: ICategory[];
   onSubmit: (data: TransactionSchemaType) => void;
 }
 
-export const TransactionForm = ({ onSubmit }: ITransactionForm) => {
-  const { formState, handleSubmit, reset } = useFormContext<TransactionSchemaType>();
+export const TransactionForm = ({ categories, onSubmit }: ITransactionForm) => {
+  const { formState, handleSubmit, reset, watch } = useFormContext<TransactionSchemaType>();
 
   const submitHandler: SubmitHandler<TransactionSchemaType> = (data) => {
     const preparedData = data;
@@ -28,25 +29,25 @@ export const TransactionForm = ({ onSubmit }: ITransactionForm) => {
     if (TEST_MODE) console.log("errors", errors);
   };
 
-  // const currentType = watch("transactionType");
-  // const isExpense = currentType === "expense";
+  const currentType = watch("transactionType");
+  const isExpense = currentType === "expense";
 
-  // const expenseCategories = categories
-  //   .filter((cat) => cat.type === "expense")
-  //   .map(({ name, id }) => ({ label: name, value: id.toString() }));
-  // const incomeCategories = categories
-  //   .filter((cat) => cat.type === "income")
-  //   .map(({ name, id }) => ({ label: name, value: id.toString() }));
+  const expenseCategories = categories
+    .filter((cat) => cat.type === "expense")
+    .map(({ name, id }) => ({ label: name, value: id.toString() }));
+  const incomeCategories = categories
+    .filter((cat) => cat.type === "income")
+    .map(({ name, id }) => ({ label: name, value: id.toString() }));
 
   return (
     <form onSubmit={handleSubmit(submitHandler, errorHandler)}>
       <fieldset disabled={formState.isSubmitting} className="grid grid-cols-2 gap-y-5 gap-x-2">
         <RHFSelect<TransactionSchemaType> label={LABELS.type} name="transactionType" options={TYPES} />
-        {/* {isExpense ? (
+        {isExpense ? (
           <RHFSelect<TransactionSchemaType> label={LABELS.category} name="categoryId" options={expenseCategories} />
         ) : (
           <RHFSelect<TransactionSchemaType> label={LABELS.category} name="categoryId" options={incomeCategories} />
-        )} */}
+        )}
         <RHFInput<TransactionSchemaType> label={LABELS.amount} name="amount" type="number" />
         <RHFDatePicker<TransactionSchemaType> label={LABELS.date} name="transactionDate" />
       </fieldset>
