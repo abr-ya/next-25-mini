@@ -1,16 +1,7 @@
+import { ITransactionsListItem } from "../_interfaces/transaction.interface";
 import { TransactionDataType } from "./transaction-form-schema";
 
-// this interface from select: getTransactionsByMonth, getLastTransactions, but they can be changed
-interface ILoadedTransaction {
-  id: number;
-  description: string;
-  amount: string;
-  transactionDate: string;
-  category: string | null;
-  transactionType: "income" | "expense" | null;
-}
-
-export const normaliseTransactions = (databaseTransactions: ILoadedTransaction[]): TransactionDataType[] =>
+export const normalizeTransactions = (databaseTransactions: ITransactionsListItem[]): TransactionDataType[] =>
   databaseTransactions.map((tx) => ({
     ...tx,
     transactionDate: new Date(tx.transactionDate),

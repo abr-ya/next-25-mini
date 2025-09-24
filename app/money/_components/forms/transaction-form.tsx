@@ -1,6 +1,6 @@
 import { SubmitErrorHandler, SubmitHandler, useFormContext } from "react-hook-form";
 
-import { LABELS, TEST_MODE, TYPES } from "./transaction-form-contants";
+import { LABELS, TEST_MODE, TYPES } from "./transaction-form-constants";
 import { RHFDatePicker, RHFInput, RHFSelect } from "./fields";
 
 import { TransactionSchemaType } from "../../_schemas/transaction-form-schema";

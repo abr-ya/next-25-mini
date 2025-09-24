@@ -1,11 +1,14 @@
 import { z } from "zod";
-import { addDays } from "date-fns";
+import { addDays, subYears } from "date-fns";
 
-// todo: mb i dont need z.coerce?!
+// todo: mb we dont need z.coerce?!
 export const transactionFormSchema = z.object({
   transactionType: z.enum(["income", "expense"]),
   categoryId: z.coerce.number().positive("Please select a category"),
-  transactionDate: z.date().max(addDays(new Date(), 1), "Transaction date cannot be in the future"),
+  transactionDate: z
+    .date()
+    .min(subYears(new Date(), 50), "Transaction date is too old")
+    .max(addDays(new Date(), 1), "Transaction date cannot be in the future"),
   amount: z.coerce.number().positive("Amount must be greater than 0"),
   description: z
     .string()

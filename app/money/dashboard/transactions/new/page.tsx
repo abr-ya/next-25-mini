@@ -13,7 +13,7 @@ const NewTransactionPage = async () => {
         { to: null, title: "New Transaction" },
       ]}
     >
-      <TransactionFormProvider categories={categories} />
+      <TransactionFormProvider categories={categories} isNew />
     </PageCard>
   );
 };
