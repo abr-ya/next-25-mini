@@ -5,4 +5,5 @@ export * from "./ui/card";
 export { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 export * from "./ui/select";
 export { Skeleton } from "./ui/skeleton";
+export { Toaster } from "./ui/sonner";
 export * from "./ui/table";

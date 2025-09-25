@@ -14,6 +14,7 @@ import { TEST_MODE } from "./transaction-form-constants";
 import { Form } from "@/components/index";
 import { ICategory } from "../../_interfaces/category.interface";
 import { createTransaction } from "../../_data/createTransaction";
+import { toast } from "sonner";
 
 interface ITransactionFormProvider {
   categories: ICategory[];
@@ -31,10 +32,14 @@ export const TransactionFormProvider = ({ init, isNew, ...props }: ITransactionF
 
   const createHandler = async (data: TransactionSchemaType) => {
     console.log("Create Handler: ", data);
-    const newTransaction = await createTransaction(data);
-    console.log("New Transaction: ", newTransaction);
-    // toast
-    // redirect
+    const newTransactionOrError = await createTransaction(data);
+    console.log("New Transaction: ", newTransactionOrError);
+    if (!newTransactionOrError || "error" in newTransactionOrError) {
+      toast.error("Something went wrong. Please try again.");
+    } else {
+      toast.success(`Transaction ${newTransactionOrError.id} (${newTransactionOrError.amount}) has been created.`);
+      // redirect
+    }
   };
 
   const editHandler = async (data: TransactionSchemaType) => {
