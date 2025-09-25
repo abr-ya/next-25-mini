@@ -10,16 +10,23 @@ export const createTransaction = async (data: ICreateTransactionPayload) => {
 
   if (!userId) return { error: true, message: "Unauthorized" };
 
-  const [transaction] = await neon
-    .insert(transactionsTable)
-    .values({
-      userId,
-      amount: data.amount.toString(),
-      description: data.description,
-      categoryId: data.categoryId,
-      transactionDate: data.transactionDate.toISOString(),
-    })
-    .returning();
+  try {
+    const [transaction] = await neon
+      .insert(transactionsTable)
+      .values({
+        userId,
+        amount: data.amount.toString(),
+        description: data.description,
+        categoryId: data.categoryId,
+        transactionDate: data.transactionDate.toISOString(),
+      })
+      .returning();
 
-  return transaction;
+    return transaction;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.log("Error creating transaction (action): ", error);
+
+    return { error: true, message: error.detail || error.message || "Action error" };
+  }
 };

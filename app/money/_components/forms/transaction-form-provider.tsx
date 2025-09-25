@@ -33,9 +33,15 @@ export const TransactionFormProvider = ({ init, isNew, ...props }: ITransactionF
   const createHandler = async (data: TransactionSchemaType) => {
     console.log("Create Handler: ", data);
     const newTransactionOrError = await createTransaction(data);
-    console.log("New Transaction: ", newTransactionOrError);
+    console.log("New Transaction (or Error): ", newTransactionOrError);
     if (!newTransactionOrError || "error" in newTransactionOrError) {
-      toast.error("Something went wrong. Please try again.");
+      console.log("Error creating transaction: ", newTransactionOrError);
+      toast.error(`Something went wrong: ${newTransactionOrError?.message}. Please try again.`, {
+        style: {
+          background: "maroon",
+          color: "white",
+        },
+      });
     } else {
       toast.success(`Transaction ${newTransactionOrError.id} (${newTransactionOrError.amount}) has been created.`);
       // redirect
