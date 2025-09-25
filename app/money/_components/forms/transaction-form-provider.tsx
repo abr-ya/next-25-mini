@@ -15,6 +15,7 @@ import { Form } from "@/components/index";
 import { ICategory } from "../../_interfaces/category.interface";
 import { createTransaction } from "../../_data/createTransaction";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface ITransactionFormProvider {
   categories: ICategory[];
@@ -23,6 +24,7 @@ interface ITransactionFormProvider {
 }
 
 export const TransactionFormProvider = ({ init, isNew, ...props }: ITransactionFormProvider) => {
+  const router = useRouter();
   const formMethods = useForm<TransactionSchemaType>({
     defaultValues: init || defaultValues,
     mode: "all",
@@ -44,7 +46,12 @@ export const TransactionFormProvider = ({ init, isNew, ...props }: ITransactionF
       });
     } else {
       toast.success(`Transaction ${newTransactionOrError.id} (${newTransactionOrError.amount}) has been created.`);
-      // redirect
+
+      // todo: ==> utils?
+      const month = data.transactionDate.getMonth() + 1;
+      const year = data.transactionDate.getFullYear();
+      // redirect to transactions list with month & year query params
+      router.push(`/money/dashboard/transactions?month=${month}&year=${year}`);
     }
   };
 
