@@ -3,6 +3,7 @@ import { PageCardWithTable } from "../../_components";
 import { searchYearMonthSchema } from "../../_schemas/search-params-schema";
 import { ButtonLink, MonthYearNavigator } from "@/app/_components/index";
 import { PATH } from "../../_constants/path";
+import { getTransactionsByMonth } from "../../_data/getTransactionsByMonth";
 
 interface ITransactionsPage {
   searchParams?: Promise<{
@@ -20,6 +21,11 @@ const TransactionsPage = async ({ searchParams }: ITransactionsPage) => {
   console.log(`TransactionsPage - searchWithDefaults: `, searchWithDefaults);
 
   const { year, month } = searchWithDefaults;
+
+  const transactions = await getTransactionsByMonth({ month, year });
+
+  console.log({ transactions });
+
   const selectedDate = format(new Date(year, month - 1, 1), "MMM yyyy");
 
   const tempYearsRange = Array.from({ length: 4 }).map((_, i) => new Date().getFullYear() - i);
