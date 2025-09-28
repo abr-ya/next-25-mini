@@ -1,5 +1,4 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../components";
-
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/index";
 export interface ISelectOption {
   value: string;
   label: string;

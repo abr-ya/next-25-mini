@@ -1,5 +1,7 @@
+import { format } from "date-fns";
 import { PageCardWithTable } from "../../_components";
 import { searchYearMonthSchema } from "../../_schemas/search-params-schema";
+import { ButtonLink, MonthYearNavigator } from "@/app/_components/index";
 
 interface ITransactionsPage {
   searchParams?: Promise<{
@@ -15,9 +17,20 @@ const TransactionsPage = async ({ searchParams }: ITransactionsPage) => {
   const searchWithDefaults = searchYearMonthSchema.parse(resolvedSearchParams);
   console.log(`TransactionsPage - searchWithDefaults: `, searchWithDefaults);
 
+  const { year, month } = searchWithDefaults;
+  const selectedDate = format(new Date(year, month - 1, 1), "MMM yyyy");
+
+  const tempYearsRange = Array.from({ length: 4 }).map((_, i) => new Date().getFullYear() - i);
+
   return (
     <PageCardWithTable
-      title="Transactions"
+      title={`${selectedDate} Transactions`}
+      headerRight={
+        <div className="flex gap-4">
+          <MonthYearNavigator month={month} year={year} yearsRange={tempYearsRange} />
+          <ButtonLink to="/dashboard/transactions/new" text="New Transaction" />
+        </div>
+      }
       breadcrumbs={[
         { to: "/money/dashboard", title: "Dashboard" },
         { to: null, title: "Transactions" },

@@ -5,25 +5,21 @@ import { format } from "date-fns";
 
 import { IPeriod } from "@/app/money/_interfaces/period.interface";
 
-import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../components";
 import { SimpleSelect } from "./simple-select";
+import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/index";
 
-interface IMonthYearSelector extends IPeriod {
-  goHandler?: (period: IPeriod) => void;
+interface IMonthYearNavigator extends IPeriod {
   yearsRange: number[];
 }
 
-const MonthYearSelector = ({ month, year, goHandler, yearsRange }: IMonthYearSelector) => {
+export const MonthYearNavigator = ({ month, year, yearsRange }: IMonthYearNavigator) => {
   const [selectedMonth, setSelectedMonth] = useState(month.toString());
   const [selectedYear, setSelectedYear] = useState(year.toString());
   const selectedDate = new Date(year, month - 1, 1);
 
-  const handleGo = () => {
-    if (goHandler) {
-      goHandler({ month: Number(selectedMonth), year: Number(selectedYear) });
-    } else {
-      console.log("No goHandler provided");
-    }
+  // todo: how to pass this props?
+  const goHandler = () => {
+    console.log("Go Handler: ", selectedMonth, selectedYear);
   };
 
   return (
@@ -45,9 +41,7 @@ const MonthYearSelector = ({ month, year, goHandler, yearsRange }: IMonthYearSel
         onSelect={setSelectedYear}
         value={selectedYear.toString()}
       />
-      <Button onClick={handleGo}>Go</Button>
+      <Button onClick={goHandler}>Go</Button>
     </div>
   );
 };
-
-export default MonthYearSelector;
