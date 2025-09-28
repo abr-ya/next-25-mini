@@ -1,9 +1,10 @@
 import { format } from "date-fns";
-import { PageCardWithTable, TransactionsTable } from "../../_components";
+import { NotFound, PageCardWithTable, TransactionsTable } from "../../_components";
 import { searchYearMonthSchema } from "../../_schemas/search-params-schema";
 import { ButtonLink, MonthYearNavigator } from "@/app/_components/index";
 import { PATH } from "../../_constants/path";
 import { getTransactionsByMonth } from "../../_data/getTransactionsByMonth";
+import { TransactionDataType } from "../../_schemas/transaction-form-schema";
 
 interface ITransactionsPage {
   searchParams?: Promise<{
@@ -30,6 +31,12 @@ const TransactionsPage = async ({ searchParams }: ITransactionsPage) => {
 
   const tempYearsRange = Array.from({ length: 4 }).map((_, i) => new Date().getFullYear() - i);
 
+  const transactionsRender = (transactions: TransactionDataType[] | null) => {
+    if (!transactions || transactions.length === 0) return <NotFound text="No transactions for this period" />;
+
+    return <TransactionsTable data={transactions} />;
+  };
+
   return (
     <PageCardWithTable
       title={`${selectedDate} Transactions`}
@@ -44,7 +51,7 @@ const TransactionsPage = async ({ searchParams }: ITransactionsPage) => {
         { to: null, title: "Transactions" },
       ]}
     >
-      <TransactionsTable data={transactions || []} />
+      {transactionsRender(transactions)}
     </PageCardWithTable>
   );
 };
