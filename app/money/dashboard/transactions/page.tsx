@@ -1,8 +1,22 @@
-import { PageCard } from "../../_components";
+import { PageCardWithTable } from "../../_components";
+import { searchYearMonthSchema } from "../../_schemas/search-params-schema";
 
-const TransactionsPage = () => {
+interface ITransactionsPage {
+  searchParams?: Promise<{
+    month?: string;
+    year?: string;
+  }>;
+}
+
+const TransactionsPage = async ({ searchParams }: ITransactionsPage) => {
+  const resolvedSearchParams = await searchParams;
+  console.log(`TransactionsPage - resolvedSearchParams: `, resolvedSearchParams);
+
+  const searchWithDefaults = searchYearMonthSchema.parse(resolvedSearchParams);
+  console.log(`TransactionsPage - searchWithDefaults: `, searchWithDefaults);
+
   return (
-    <PageCard
+    <PageCardWithTable
       title="Transactions"
       breadcrumbs={[
         { to: "/money/dashboard", title: "Dashboard" },
@@ -10,7 +24,7 @@ const TransactionsPage = () => {
       ]}
     >
       Transactions
-    </PageCard>
+    </PageCardWithTable>
   );
 };
 
