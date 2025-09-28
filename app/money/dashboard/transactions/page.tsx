@@ -5,6 +5,7 @@ import { ButtonLink, MonthYearNavigator } from "@/app/_components/index";
 import { PATH } from "../../_constants/path";
 import { getTransactionsByMonth } from "../../_data/getTransactionsByMonth";
 import { TransactionDataType } from "../../_schemas/transaction-form-schema";
+import { getTransactionYearsRange } from "../../_data/getTransactionYearsRange";
 
 interface ITransactionsPage {
   searchParams?: Promise<{
@@ -24,12 +25,11 @@ const TransactionsPage = async ({ searchParams }: ITransactionsPage) => {
   const { year, month } = searchWithDefaults;
 
   const transactions = await getTransactionsByMonth({ month, year });
+  const yearsRange = await getTransactionYearsRange();
 
-  console.log({ transactions });
+  console.log(transactions, yearsRange);
 
   const selectedDate = format(new Date(year, month - 1, 1), "MMM yyyy");
-
-  const tempYearsRange = Array.from({ length: 4 }).map((_, i) => new Date().getFullYear() - i);
 
   const transactionsRender = (transactions: TransactionDataType[] | null) => {
     if (!transactions || transactions.length === 0) return <NotFound text="No transactions for this period" />;
@@ -42,7 +42,7 @@ const TransactionsPage = async ({ searchParams }: ITransactionsPage) => {
       title={`${selectedDate} Transactions`}
       headerRight={
         <div className="flex gap-4">
-          <MonthYearNavigator path={PATH.transactions} month={month} year={year} yearsRange={tempYearsRange} />
+          <MonthYearNavigator path={PATH.transactions} month={month} year={year} yearsRange={yearsRange} />
           <ButtonLink to={PATH.newTransaction} text="New Transaction" />
         </div>
       }

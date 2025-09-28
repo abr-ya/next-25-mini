@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { format } from "date-fns";
 import { PencilIcon } from "lucide-react";
+import numeral from "numeral";
 
 import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Badge } from "@/components/index";
 import { TransactionDataType } from "../../_schemas/transaction-form-schema";
@@ -33,7 +34,7 @@ export const TransactionsTable = ({ data }: ITransactionsTableProps) => (
             </Badge>
           </TableCell>
           <TableCell>{transaction.category}</TableCell>
-          <TableCell className="text-right">{transaction.amount} usd</TableCell>
+          <TableCell className="text-right">{numeral(transaction.amount).format("0,0.00 $")}</TableCell>
           <TableCell className="text-right">
             <Button variant="outline" size="icon" aria-label="Edit transaction" asChild>
               <Link href={`${PATH.transactions}/${transaction.id.toString()}`}>
