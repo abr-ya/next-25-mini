@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { PageCardWithTable } from "../../_components";
+import { PageCardWithTable, TransactionsTable } from "../../_components";
 import { searchYearMonthSchema } from "../../_schemas/search-params-schema";
 import { ButtonLink, MonthYearNavigator } from "@/app/_components/index";
 import { PATH } from "../../_constants/path";
@@ -44,7 +44,7 @@ const TransactionsPage = async ({ searchParams }: ITransactionsPage) => {
         { to: null, title: "Transactions" },
       ]}
     >
-      Transactions
+      <TransactionsTable data={transactions || []} />
     </PageCardWithTable>
   );
 };

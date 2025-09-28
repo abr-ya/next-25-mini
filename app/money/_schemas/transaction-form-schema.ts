@@ -23,10 +23,14 @@ export const updateTransactionSchema = transactionFormSchema.extend({
 export type TransactionSchemaType = z.infer<typeof transactionFormSchema>;
 export type UpdateTransactionSchemaType = z.infer<typeof updateTransactionSchema>;
 
-export type TransactionDataType = Omit<TransactionSchemaType, "categoryId" | "amount" | "transactionType"> & {
+export type TransactionDataType = Omit<
+  TransactionSchemaType,
+  "categoryId" | "amount" | "transactionType" | "transactionDate"
+> & {
   id: number;
   amount: string; // because from db it's coming as string
-  category: string;
+  category: string | null; // because of left join
+  transactionDate: string; // because from db it's coming as string
   transactionType: "income" | "expense" | null; // because of left join
   createdAt?: Date;
   updatedAt?: Date;
