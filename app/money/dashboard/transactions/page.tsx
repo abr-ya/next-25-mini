@@ -1,11 +1,13 @@
 import { format } from "date-fns";
-import { NotFound, PageCardWithTable, TransactionsTable } from "../../_components";
-import { searchYearMonthSchema } from "../../_schemas/search-params-schema";
+
 import { ButtonLink, MonthYearNavigator } from "@/app/_components/index";
-import { PATH } from "../../_constants/path";
-import { getTransactionsByMonth } from "../../_data/getTransactionsByMonth";
-import { TransactionDataType } from "../../_schemas/transaction-form-schema";
-import { getTransactionYearsRange } from "../../_data/getTransactionYearsRange";
+
+import { NotFound, PageCardWithTable, TransactionsTable } from "@money/_components";
+import { PATH } from "@money/_constants/path";
+import { getTransactionsByMonth } from "@money/_data/getTransactionsByMonth";
+import { getTransactionYearsRange } from "@money/_data/getTransactionYearsRange";
+import { searchYearMonthSchema } from "@money/_schemas/search-params-schema";
+import { TransactionDataType } from "@money/_schemas/transaction-form-schema";
 
 interface ITransactionsPage {
   searchParams?: Promise<{
