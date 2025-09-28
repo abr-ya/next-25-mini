@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { PageCardWithTable } from "../../_components";
 import { searchYearMonthSchema } from "../../_schemas/search-params-schema";
 import { ButtonLink, MonthYearNavigator } from "@/app/_components/index";
+import { PATH } from "../../_constants/path";
 
 interface ITransactionsPage {
   searchParams?: Promise<{
@@ -11,10 +12,11 @@ interface ITransactionsPage {
 }
 
 const TransactionsPage = async ({ searchParams }: ITransactionsPage) => {
-  const resolvedSearchParams = await searchParams;
-  console.log(`TransactionsPage - resolvedSearchParams: `, resolvedSearchParams);
-
-  const searchWithDefaults = searchYearMonthSchema.parse(resolvedSearchParams);
+  const rawParams = await searchParams;
+  const searchWithDefaults = searchYearMonthSchema.parse({
+    month: rawParams?.month ? parseInt(rawParams.month) : undefined,
+    year: rawParams?.year ? parseInt(rawParams.year) : undefined,
+  });
   console.log(`TransactionsPage - searchWithDefaults: `, searchWithDefaults);
 
   const { year, month } = searchWithDefaults;
@@ -27,12 +29,12 @@ const TransactionsPage = async ({ searchParams }: ITransactionsPage) => {
       title={`${selectedDate} Transactions`}
       headerRight={
         <div className="flex gap-4">
-          <MonthYearNavigator month={month} year={year} yearsRange={tempYearsRange} />
-          <ButtonLink to="/dashboard/transactions/new" text="New Transaction" />
+          <MonthYearNavigator path={PATH.transactions} month={month} year={year} yearsRange={tempYearsRange} />
+          <ButtonLink to={PATH.newTransaction} text="New Transaction" />
         </div>
       }
       breadcrumbs={[
-        { to: "/money/dashboard", title: "Dashboard" },
+        { to: PATH.dashboard, title: "Dashboard" },
         { to: null, title: "Transactions" },
       ]}
     >

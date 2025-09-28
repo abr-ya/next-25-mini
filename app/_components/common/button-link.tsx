@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button, IButtonProps } from "../../../components/ui/button";
+import { Button, IButtonProps } from "@/components/ui/button";
 
 interface IButtonLink extends IButtonProps {
   to: string;

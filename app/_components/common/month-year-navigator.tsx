@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 
 import { IPeriod } from "@/app/money/_interfaces/period.interface";
@@ -9,17 +10,20 @@ import { SimpleSelect } from "./simple-select";
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/index";
 
 interface IMonthYearNavigator extends IPeriod {
+  path: string;
   yearsRange: number[];
 }
 
-export const MonthYearNavigator = ({ month, year, yearsRange }: IMonthYearNavigator) => {
+export const MonthYearNavigator = ({ month, year, yearsRange, path }: IMonthYearNavigator) => {
   const [selectedMonth, setSelectedMonth] = useState(month.toString());
   const [selectedYear, setSelectedYear] = useState(year.toString());
   const selectedDate = new Date(year, month - 1, 1);
 
-  // todo: how to pass this props?
+  const router = useRouter();
+
   const goHandler = () => {
     console.log("Go Handler: ", selectedMonth, selectedYear);
+    router.push(`${path}?month=${selectedMonth}&year=${selectedYear}`);
   };
 
   return (
