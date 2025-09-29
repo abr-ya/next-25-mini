@@ -1,4 +1,7 @@
-import { PageCard } from "@money/_components";
+import { notFound } from "next/navigation";
+
+import { PageCard, TransactionFormProvider } from "@money/_components";
+import { getCategories } from "@money/_data/getCategories";
 
 interface IEditTransactionPage {
   params: Promise<{
@@ -10,7 +13,13 @@ const EditTransactionPage = async ({ params }: IEditTransactionPage) => {
   const paramsValues = await params;
   const id = Number(paramsValues.id);
 
-  // todo: update breadcrumbs!
+  if (isNaN(id)) notFound();
+
+  const categories = await getCategories();
+  console.log(categories);
+
+  // todo: get transaction data (delete isNew)
+
   return (
     <PageCard
       title="EditTransactionPage"
@@ -20,7 +29,7 @@ const EditTransactionPage = async ({ params }: IEditTransactionPage) => {
         { to: null, title: "Edit Transaction" },
       ]}
     >
-      EditTransactionPage {id}
+      <TransactionFormProvider categories={categories} isNew />
     </PageCard>
   );
 };
