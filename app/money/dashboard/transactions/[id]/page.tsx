@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 
 import { PageCard, TransactionFormProvider } from "@money/_components";
 import { getCategories } from "@money/_data/getCategories";
+import { getTransaction } from "@/app/money/_data/getTransaction";
+import { prepareTransactionForForm } from "@/app/money/_schemas/normalize";
 
 interface IEditTransactionPage {
   params: Promise<{
@@ -16,9 +18,11 @@ const EditTransactionPage = async ({ params }: IEditTransactionPage) => {
   if (isNaN(id)) notFound();
 
   const categories = await getCategories();
-  console.log(categories);
+  const currentValues = await getTransaction(id);
+  console.log(categories, currentValues);
 
-  // todo: get transaction data (delete isNew)
+  const init = currentValues ? prepareTransactionForForm(currentValues) : {};
+  console.log("Init values for form: ", init); // todo: categoryID?!
 
   return (
     <PageCard
@@ -29,7 +33,11 @@ const EditTransactionPage = async ({ params }: IEditTransactionPage) => {
         { to: null, title: "Edit Transaction" },
       ]}
     >
-      <TransactionFormProvider categories={categories} isNew />
+      {currentValues ? (
+        <TransactionFormProvider categories={categories} init={init} />
+      ) : (
+        <>Can't get current transaction</>
+      )}
     </PageCard>
   );
 };

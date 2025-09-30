@@ -14,3 +14,14 @@ export interface ITransactionsListItem {
   category: string | null;
   transactionType: "income" | "expense" | null;
 }
+
+export interface ITransactionDetail {
+  id: number;
+  transactionType: "income" | "expense" | null;
+  categoryId: number;
+  amount: string;
+  transactionDate: string;
+  description: string;
+  // createdAt: string;
+  // updatedAt: string;
+}
