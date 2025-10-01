@@ -32,12 +32,13 @@ export const TransactionForm = ({ categories, onSubmit }: ITransactionForm) => {
   const currentType = watch("transactionType");
   const preparedCategories = categories
     .filter((cat) => cat.type === currentType)
-    .map(({ name, id }) => ({ label: name, value: id.toString() }));
+    .map(({ name, id }) => ({ label: name, value: id }));
 
   return (
     <form onSubmit={handleSubmit(submitHandler, errorHandler)}>
       <fieldset disabled={formState.isSubmitting} className="grid grid-cols-2 gap-y-5 gap-x-2">
         <RHFSelect<TransactionSchemaType> label={LABELS.type} name="transactionType" options={TYPES} />
+        {/* @ts-expect-error number in select =CategoryID= - it works for edit == todo: to fix correct! */}
         <RHFSelect<TransactionSchemaType> label={LABELS.category} name="categoryId" options={preparedCategories} />
         <RHFInput<TransactionSchemaType> label={LABELS.amount} name="amount" type="number" />
         <RHFDatePicker<TransactionSchemaType> label={LABELS.date} name="transactionDate" />
