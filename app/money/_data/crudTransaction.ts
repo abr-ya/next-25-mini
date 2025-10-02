@@ -1,11 +1,12 @@
 "use server";
 
-import { neon } from "@/db";
-
-import { categoriesTable, transactionsTable } from "@/db/schema";
-import { auth } from "@clerk/nextjs/server";
-import { ICreateTransactionPayload, IUpdateTransactionPayload } from "../_interfaces/transaction.interface";
 import { and, eq } from "drizzle-orm";
+import { auth } from "@clerk/nextjs/server";
+import { format } from "date-fns";
+
+import { neon } from "@/db";
+import { categoriesTable, transactionsTable } from "@/db/schema";
+import { ICreateTransactionPayload, IUpdateTransactionPayload } from "../_interfaces/transaction.interface";
 import { updateTransactionSchema } from "../_schemas/transaction-form-schema";
 
 export const createTransaction = async (data: ICreateTransactionPayload) => {
@@ -21,7 +22,7 @@ export const createTransaction = async (data: ICreateTransactionPayload) => {
         amount: data.amount.toString(),
         description: data.description,
         categoryId: data.categoryId,
-        transactionDate: data.transactionDate.toISOString(),
+        transactionDate: format(data.transactionDate, "P"),
       })
       .returning();
 
@@ -34,7 +35,7 @@ export const createTransaction = async (data: ICreateTransactionPayload) => {
   }
 };
 
-export async function getTransaction(transactionId: number) {
+export const getTransaction = async (transactionId: number) => {
   const { userId } = await auth();
 
   if (!userId) return null;
@@ -53,33 +54,23 @@ export async function getTransaction(transactionId: number) {
     .leftJoin(categoriesTable, eq(transactionsTable.categoryId, categoriesTable.id));
 
   return transaction;
-}
+};
 
 export const updateTransaction = async (data: IUpdateTransactionPayload) => {
   const { userId } = await auth();
 
-  if (!userId) {
-    return {
-      error: true,
-      message: "Unauthorized",
-    };
-  }
+  if (!userId) return { error: true, message: "Unauthorized" };
 
   const validation = updateTransactionSchema.safeParse(data);
 
-  if (!validation.success) {
-    return {
-      error: true,
-      message: validation.error.issues[0].message,
-    };
-  }
+  if (!validation.success) return { error: true, message: validation.error.issues[0].message };
 
   const [transaction] = await neon
     .update(transactionsTable)
     .set({
       description: data.description,
       amount: data.amount.toString(),
-      transactionDate: data.transactionDate.toISOString(),
+      transactionDate: format(data.transactionDate, "P"),
       categoryId: data.categoryId,
     })
     .where(and(eq(transactionsTable.id, data.id), eq(transactionsTable.userId, userId)))

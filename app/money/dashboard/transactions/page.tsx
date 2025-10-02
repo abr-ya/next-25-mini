@@ -29,8 +29,6 @@ const TransactionsPage = async ({ searchParams }: ITransactionsPage) => {
   const transactions = await getTransactionsByMonth({ month, year });
   const yearsRange = await getTransactionYearsRange();
 
-  console.log(transactions, yearsRange);
-
   const selectedDate = format(new Date(year, month - 1, 1), "MMM yyyy");
 
   const transactionsRender = (transactions: TransactionDataType[] | null) => {
