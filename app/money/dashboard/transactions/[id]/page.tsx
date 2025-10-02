@@ -2,8 +2,8 @@ import { notFound } from "next/navigation";
 
 import { PageCard, TransactionFormProvider } from "@money/_components";
 import { getCategories } from "@money/_data/getCategories";
-import { getTransaction } from "@/app/money/_data/getTransaction";
-import { prepareTransactionForForm } from "@/app/money/_schemas/normalize";
+import { getTransaction } from "@money/_data/crudTransaction";
+import { prepareTransactionForForm } from "@money/_schemas/normalize";
 
 interface IEditTransactionPage {
   params: Promise<{
@@ -21,8 +21,8 @@ const EditTransactionPage = async ({ params }: IEditTransactionPage) => {
   const currentValues = await getTransaction(id);
   console.log(categories, currentValues);
 
-  const init = currentValues ? prepareTransactionForForm(currentValues) : {};
-  console.log("Init values for form: ", init); // todo: categoryID?!
+  const init = currentValues ? prepareTransactionForForm(currentValues) : null;
+  console.log("Init values for form: ", init);
 
   return (
     <PageCard

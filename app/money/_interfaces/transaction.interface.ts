@@ -5,6 +5,10 @@ export interface ICreateTransactionPayload {
   description: string;
 }
 
+export interface IUpdateTransactionPayload extends ICreateTransactionPayload {
+  id: number;
+}
+
 // this interface from select: getTransactionsByMonth, getLastTransactions, but they can be changed
 export interface ITransactionsListItem {
   id: number;
