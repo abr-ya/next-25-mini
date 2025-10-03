@@ -12,6 +12,7 @@ import { updateTransactionSchema } from "../_schemas/transaction-form-schema";
 export const createTransaction = async (data: ICreateTransactionPayload) => {
   const { userId } = await auth();
 
+  // todo: messages should be handled in a better way
   if (!userId) return { error: true, message: "Unauthorized" };
 
   try {
@@ -59,6 +60,7 @@ export const getTransaction = async (transactionId: number) => {
 export const updateTransaction = async (data: IUpdateTransactionPayload) => {
   const { userId } = await auth();
 
+  // todo: messages should be handled in a better way
   if (!userId) return { error: true, message: "Unauthorized" };
 
   const validation = updateTransactionSchema.safeParse(data);
@@ -78,3 +80,14 @@ export const updateTransaction = async (data: IUpdateTransactionPayload) => {
 
   return transaction;
 };
+
+export async function deleteTransaction(transactionId: number) {
+  const { userId } = await auth();
+
+  // todo: messages should be handled in a better way
+  if (!userId) return { error: true, message: "Unauthorized" };
+
+  await neon
+    .delete(transactionsTable)
+    .where(and(eq(transactionsTable.id, transactionId), eq(transactionsTable.userId, userId)));
+}
