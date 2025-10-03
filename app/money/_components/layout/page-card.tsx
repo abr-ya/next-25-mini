@@ -12,7 +12,7 @@ interface IPageCardWithTable extends IPageCard {
 }
 
 export const PageCard = ({ breadcrumbs, children, title }: PropsWithChildren<IPageCard>) => (
-  <div className="max-w-screen-xl mx-auto py-10">
+  <div className="max-w-screen-xl mx-auto py-5 px-4">
     {breadcrumbs ? <Breadcrumbs data={breadcrumbs} /> : null}
     <Card className="mt-4 max-w-screen-md">
       <CardHeader>
@@ -30,7 +30,7 @@ export const PageCardWithTable = ({
   breadcrumbs,
   headerRight,
 }: PropsWithChildren<IPageCardWithTable>) => (
-  <div className="max-w-screen-xl mx-auto py-10">
+  <div className="max-w-screen-xl mx-auto py-5 px-4">
     {breadcrumbs ? <Breadcrumbs data={breadcrumbs} /> : null}
     <Card className="mt-4">
       <CardHeader>
