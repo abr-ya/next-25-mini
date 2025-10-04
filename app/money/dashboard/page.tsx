@@ -7,7 +7,6 @@ const DashboardPage = () => {
       <PageCardWithTable
         title="Cashflow"
         // todo: simpleSelect with Year for Cashflow
-        breadcrumbs={[{ to: null, title: "Dashboard" }]}
       >
         <Cashflow data={[]} />
       </PageCardWithTable>

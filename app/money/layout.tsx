@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Header } from "./_components";
+import { AutoBreadcrumbs, Header } from "./_components";
 import { Footer } from "../_components";
 
 export const metadata: Metadata = {
@@ -10,7 +10,12 @@ export const metadata: Metadata = {
 const MoneyLayout = ({ children }: { children: React.ReactNode }) => (
   <>
     <Header />
-    <main className="flex-1 h-[calc(100vh-100px)]">{children}</main>
+    <main className="flex-1 h-[calc(100vh-100px)]">
+      <div className="max-w-screen-xl mx-auto py-5 px-4">
+        <AutoBreadcrumbs />
+        {children}
+      </div>
+    </main>
     <Footer />
   </>
 );

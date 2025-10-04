@@ -27,14 +27,7 @@ const EditTransactionPage = async ({ params }: IEditTransactionPage) => {
   console.log("Init values for form: ", init);
 
   return (
-    <PageCard
-      title="EditTransactionPage"
-      breadcrumbs={[
-        { to: "/money/dashboard", title: "Dashboard" },
-        { to: "/money/dashboard/transactions", title: "Transactions" },
-        { to: null, title: "Edit Transaction" },
-      ]}
-    >
+    <PageCard title="Edit Transaction">
       <TransactionFormProvider categories={categories} init={init} />
     </PageCard>
   );

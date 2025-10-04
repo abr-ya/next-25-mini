@@ -1,3 +1,4 @@
+export { AutoBreadcrumbs } from "./layout/auto-breadcrumbs";
 export { Header } from "./layout/header";
 export { UserMenu } from "./layout/user-menu";
 export { NotFound } from "./layout/not-found";

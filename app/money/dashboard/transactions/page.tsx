@@ -46,10 +46,6 @@ const TransactionsPage = async ({ searchParams }: ITransactionsPage) => {
           <ButtonLink to={PATH.newTransaction} text="New Transaction" />
         </div>
       }
-      breadcrumbs={[
-        { to: PATH.dashboard, title: "Dashboard" },
-        { to: null, title: "Transactions" },
-      ]}
     >
       {transactionsRender(transactions)}
     </PageCardWithTable>

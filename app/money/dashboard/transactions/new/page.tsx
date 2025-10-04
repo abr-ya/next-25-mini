@@ -5,14 +5,7 @@ const NewTransactionPage = async () => {
   const categories = await getCategories();
 
   return (
-    <PageCard
-      title="New Transaction"
-      breadcrumbs={[
-        { to: "/money/dashboard", title: "Dashboard" },
-        { to: "/money/dashboard/transactions", title: "Transactions" },
-        { to: null, title: "New Transaction" },
-      ]}
-    >
+    <PageCard title="New Transaction">
       <TransactionFormProvider categories={categories} isNew />
     </PageCard>
   );
