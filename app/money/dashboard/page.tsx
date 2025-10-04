@@ -1,7 +1,10 @@
 import { PageCardWithTable } from "../_components";
+import { getLastTransactions } from "../_data/getLastTransactions";
 import { Cashflow, LastTransactions } from "./_components/index";
 
-const DashboardPage = () => {
+const DashboardPage = async () => {
+  const lastTransactions = await getLastTransactions();
+
   return (
     <>
       <PageCardWithTable
@@ -10,7 +13,7 @@ const DashboardPage = () => {
       >
         <Cashflow data={[]} />
       </PageCardWithTable>
-      <LastTransactions transactions={[]} />
+      <LastTransactions transactions={lastTransactions} />
     </>
   );
 };

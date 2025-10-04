@@ -1,4 +1,5 @@
 import "server-only";
+
 import { neon } from "@/db";
 import { categoriesTable } from "@/db/schema";
 
