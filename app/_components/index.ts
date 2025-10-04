@@ -3,6 +3,7 @@ export { Breadcrumbs, type ICrumb } from "./layout/breadcrumbs";
 
 export { ButtonLink } from "./common/button-link";
 export { MonthYearNavigator } from "./common/month-year-navigator";
+export { YearNavigator } from "./common/year-navigator";
 export { NextLinks } from "./common/next-links";
 export { NextLogo } from "./common/next-logo";
 export { ProjectsLinks } from "./common/projects-links";
