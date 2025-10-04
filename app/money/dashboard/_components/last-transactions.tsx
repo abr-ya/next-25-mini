@@ -1,7 +1,7 @@
-import { PageCardWithTable } from "../../_components/index";
+import { NotFound, PageCardWithTable } from "@money/_components/index";
 import { ButtonLink } from "@/app/_components/index";
-import { TransactionDataType } from "../../_schemas/transaction-form-schema";
-import { PATH } from "../../_constants/path";
+import { TransactionDataType } from "@money/_schemas/transaction-form-schema";
+import { PATH } from "@money/_constants/path";
 
 interface ILastTransactions {
   transactions: TransactionDataType[];
@@ -17,10 +17,6 @@ export const LastTransactions = ({ transactions }: ILastTransactions) => (
       </div>
     }
   >
-    {transactions.length === 0 ? (
-      <p className="text-center py-10 text-lg text-muted-foreground">No transactions found.</p>
-    ) : (
-      <div>ToDo: TransactionsTable</div>
-    )}
+    {transactions.length === 0 ? <NotFound text="No transactions found" /> : <div>ToDo: TransactionsTable</div>}
   </PageCardWithTable>
 );

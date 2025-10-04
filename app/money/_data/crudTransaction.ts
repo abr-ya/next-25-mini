@@ -67,6 +67,8 @@ export const updateTransaction = async (data: IUpdateTransactionPayload) => {
 
   if (!validation.success) return { error: true, message: validation.error.issues[0].message };
 
+  if (!data.id) return { error: true, message: "Transaction ID is required" };
+
   const [transaction] = await neon
     .update(transactionsTable)
     .set({
@@ -84,10 +86,17 @@ export const updateTransaction = async (data: IUpdateTransactionPayload) => {
 export async function deleteTransaction(transactionId: number) {
   const { userId } = await auth();
 
+  if (transactionId <= 25)
+    return { error: true, message: "You can't delete transactions with ID less than or equal to 25" };
+
   // todo: messages should be handled in a better way
   if (!userId) return { error: true, message: "Unauthorized" };
 
-  await neon
+  const res = await neon
     .delete(transactionsTable)
     .where(and(eq(transactionsTable.id, transactionId), eq(transactionsTable.userId, userId)));
+
+  console.log("Delete result:", res);
+
+  return { error: false, message: `Transaction ${transactionId} deleted` };
 }
