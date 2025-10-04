@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const MoneyLayout = ({ children }: { children: React.ReactNode }) => (
   <>
     <Header />
-    <main className="flex-1 h-[calc(100vh-100px)]">
+    <main className="flex-1 h-[calc(100vh-100px)] overflow-y-scroll">
       <div className="max-w-screen-xl mx-auto py-5 px-4">
         <AutoBreadcrumbs />
         {children}

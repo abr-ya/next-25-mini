@@ -1,4 +1,4 @@
-import { IMonthlyCashflow } from "../../_interfaces/cashflow.interface";
+import { IMonthlyCashflow } from "@money/_interfaces/cashflow.interface";
 
 interface ICashflow {
   data: IMonthlyCashflow[];
