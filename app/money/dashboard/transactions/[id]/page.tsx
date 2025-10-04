@@ -21,6 +21,8 @@ const EditTransactionPage = async ({ params }: IEditTransactionPage) => {
   const currentValues = await getTransaction(id);
   console.log(categories, currentValues);
 
+  if (!currentValues) notFound();
+
   const init = currentValues ? prepareTransactionForForm(currentValues) : null;
   console.log("Init values for form: ", init);
 
@@ -33,11 +35,7 @@ const EditTransactionPage = async ({ params }: IEditTransactionPage) => {
         { to: null, title: "Edit Transaction" },
       ]}
     >
-      {currentValues ? (
-        <TransactionFormProvider categories={categories} init={init} />
-      ) : (
-        <>Can't get current transaction</>
-      )}
+      <TransactionFormProvider categories={categories} init={init} />
     </PageCard>
   );
 };
