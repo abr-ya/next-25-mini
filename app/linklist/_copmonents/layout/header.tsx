@@ -6,7 +6,7 @@ export const Header = () => (
   <header className="bg-white border-b py-4">
     <div className="max-w-4xl flex justify-between mx-auto px-6">
       <div className="flex items-center gap-6">
-        <Link href={"/"} className="flex items-center gap-2 text-blue-500">
+        <Link href={"/linklist/"} className="flex items-center gap-2 text-blue-500">
           <LinkIcon size={24} />
           <span className="font-bold">LinkList</span>
         </Link>
