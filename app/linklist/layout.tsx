@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 const LinksListLayout = ({ children }: { children: React.ReactNode }) => (
   <>
     <Header />
-    <main>
+    <main className="bg-gray-100 min-h-[calc(100vh-64px)]">
       <div className="max-w-4xl mx-auto p-6">{children}</div>
     </main>
   </>
