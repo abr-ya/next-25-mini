@@ -20,7 +20,8 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@money/*": ["./app/money/*"]
+      "@money/*": ["./app/money/*"],
+      "@linklist/*": ["./app/linklist/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
