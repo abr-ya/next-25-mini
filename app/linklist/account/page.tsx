@@ -1,4 +1,5 @@
-import { PageSettingsForm } from "../_copmonents/index";
+import { PageSettingsForm, UsernameForm } from "../_copmonents/index";
+import { getLastLinkPage } from "../_data/crudLinkPage";
 
 interface IAccountPage {
   searchParams?: Promise<{
@@ -12,19 +13,23 @@ const AccountPage = async ({ searchParams }: IAccountPage) => {
 
   console.log("desiredUsername", desiredUsername);
 
+  const page = await getLastLinkPage();
+
+  console.log("page", page);
+
+  if (!page) {
+    return (
+      <div>
+        No page found. Please create one first...
+        <UsernameForm desiredUsername={desiredUsername ?? ""} />
+      </div>
+    );
+  }
+
   return (
     <div>
       AccountPage
-      <PageSettingsForm
-        page={{
-          bgType: "color",
-          bgColor: "#dedede",
-          bgImage: "",
-          displayName: "John Doe",
-          location: "Somewhere",
-          bio: "Hello, I'm John!",
-        }}
-      />
+      <PageSettingsForm page={page} />
     </div>
   );
 };

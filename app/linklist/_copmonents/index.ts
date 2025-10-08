@@ -7,3 +7,4 @@ export { SectionBox } from "./layout/section-box";
 
 export { HeroForm } from "./forms/hero-form";
 export { PageSettingsForm } from "./forms/page-settings-form";
+export { UsernameForm } from "./forms/username-form";

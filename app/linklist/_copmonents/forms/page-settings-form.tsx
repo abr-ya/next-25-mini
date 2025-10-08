@@ -7,17 +7,17 @@ interface IPageSettingsFormProps {
   page: {
     bgType: "color" | "image";
     bgColor: string;
-    bgImage: string;
-    displayName: string;
-    location: string;
-    bio: string;
+    bgImage: string | null;
+    displayName: string | null;
+    location: string | null;
+    bio: string | null;
   };
 }
 
 export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
   const [bgType] = useState<"color" | "image">(page.bgType);
   const [bgColor, setBgColor] = useState<string>(page.bgColor);
-  const [bgImage] = useState<string>(page.bgImage);
+  const [bgImage] = useState<string | null>(page.bgImage);
 
   const saveBaseSettings = (formData: FormData) => {
     console.log(formData);
@@ -58,7 +58,13 @@ export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
           <label className="input-label" htmlFor="nameIn">
             Display name
           </label>
-          <input type="text" id="nameIn" name="displayName" defaultValue={page.displayName} placeholder="John Doe" />
+          <input
+            type="text"
+            id="nameIn"
+            name="displayName"
+            defaultValue={page.displayName || ""}
+            placeholder="John Doe"
+          />
           <label className="input-label" htmlFor="locationIn">
             Location
           </label>
@@ -66,13 +72,13 @@ export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
             type="text"
             id="locationIn"
             name="location"
-            defaultValue={page.location}
+            defaultValue={page.location || ""}
             placeholder="Somewhere in the world"
           />
           <label className="input-label" htmlFor="bioIn">
             Bio
           </label>
-          <textarea name="bio" defaultValue={page.bio} id="bioIn" placeholder="Your bio goes here..." />
+          <textarea name="bio" defaultValue={page.bio || ""} id="bioIn" placeholder="Your bio goes here..." />
           <div className="max-w-[200px] mx-auto">
             <SubmitButton>Save Settings</SubmitButton>
           </div>
