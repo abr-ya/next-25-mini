@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
+
 import { SectionBox, SubmitButton } from "..";
 
 interface IPageSettingsFormProps {
@@ -8,6 +10,7 @@ interface IPageSettingsFormProps {
     bgType: "color" | "image";
     bgColor: string;
     bgImage: string | null;
+    userImage: string | null;
     displayName: string | null;
     location: string | null;
     bio: string | null;
@@ -22,6 +25,8 @@ export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
   const saveBaseSettings = (formData: FormData) => {
     console.log(formData);
   };
+
+  const avatar = page.userImage || "https://gravatar.com/avatar/?d=mp&f=y";
 
   return (
     <SectionBox>
@@ -50,7 +55,7 @@ export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
         <div className="flex justify-center -mb-12">
           <div className="relative -top-8 w-[128px] h-[128px]">
             <div className="overflow-hidden h-full rounded-full border-4 border-white shadow shadow-black/50">
-              todo: avatar upload
+              <Image className="w-full h-full object-cover" src={avatar} alt={"avatar"} width={128} height={128} />
             </div>
           </div>
         </div>

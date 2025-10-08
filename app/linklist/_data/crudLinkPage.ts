@@ -50,6 +50,7 @@ export const getLastLinkPage = async () => {
       bgType: linkPagesTable.bgType,
       bgColor: linkPagesTable.bgColor,
       bgImage: linkPagesTable.bgImage,
+      userImage: linkPagesTable.userImage,
       displayName: linkPagesTable.displayName,
       location: linkPagesTable.location,
       bio: linkPagesTable.bio,

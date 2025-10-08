@@ -34,6 +34,7 @@ export const linkPagesTable = pgTable("link_pages", {
   }).notNull(),
   bgColor: text("bg_color").notNull().default("#ffffff"),
   bgImage: text("bg_image"),
+  userImage: text("user_image"),
   displayName: text("display_name"),
   location: text(),
   bio: text(),
