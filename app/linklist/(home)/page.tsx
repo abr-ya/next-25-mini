@@ -1,5 +1,5 @@
-import { ButtonLink } from "../_components";
-import { HeroForm } from "./_copmonents/index";
+import { ButtonLink } from "../../_components";
+import { HeroForm } from "../_copmonents/index";
 
 const LinksPage = () => (
   <section className="pt-32">
