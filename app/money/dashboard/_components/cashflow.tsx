@@ -9,6 +9,6 @@ interface ICashflow {
 export const Cashflow = ({ data }: ICashflow) => (
   <div className="flex gap-4">
     <CashflowChart data={data} />
-    <CashflowSummary />
+    <CashflowSummary data={data} />
   </div>
 );
