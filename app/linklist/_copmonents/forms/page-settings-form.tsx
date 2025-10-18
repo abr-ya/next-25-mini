@@ -4,9 +4,13 @@ import { useState } from "react";
 import Image from "next/image";
 
 import { SectionBox, SubmitButton } from "..";
+import { updateLinkPage } from "@linklist/_data/crudLinkPage";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface IPageSettingsFormProps {
   page: {
+    id: number;
     bgType: "color" | "image";
     bgColor: string;
     bgImage: string | null;
@@ -18,12 +22,21 @@ interface IPageSettingsFormProps {
 }
 
 export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
+  const router = useRouter();
+
   const [bgType] = useState<"color" | "image">(page.bgType);
   const [bgColor, setBgColor] = useState<string>(page.bgColor);
   const [bgImage] = useState<string | null>(page.bgImage);
 
-  const saveBaseSettings = (formData: FormData) => {
-    console.log(formData);
+  const saveBaseSettings = async (formData: FormData) => {
+    const payload = Object.fromEntries(formData);
+    const result = await updateLinkPage(page.id, payload);
+
+    console.log("result", result);
+    if (!result.error) {
+      router.refresh();
+      toast.success("LinkPage has been updated!"); // todo: Green theme!
+    }
   };
 
   const avatar = page.userImage || "https://gravatar.com/avatar/?d=mp&f=y";

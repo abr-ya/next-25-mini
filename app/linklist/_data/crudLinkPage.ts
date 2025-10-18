@@ -3,7 +3,8 @@
 import { neon } from "@/db";
 import { linkPagesTable } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
+import { IUpdateLinkPage } from "../_interfaces/link-page.interface";
 
 export const createLinkPage = async (formData: FormData) => {
   const { userId } = await auth();
@@ -62,4 +63,23 @@ export const getLastLinkPage = async () => {
     .limit(1);
 
   return pages[0];
+};
+
+export const updateLinkPage = async (id: number, data: IUpdateLinkPage) => {
+  const { userId } = await auth();
+
+  console.log("updateLinkPage", id, userId, data);
+
+  // todo: messages should be handled in a better way
+  if (!userId) return { error: true, message: "Unauthorized" };
+
+  if (!id) return { error: true, message: "Page ID is required" };
+
+  const [updatedPage] = await neon
+    .update(linkPagesTable)
+    .set(data)
+    .where(and(eq(linkPagesTable.id, id), eq(linkPagesTable.userId, userId)))
+    .returning();
+
+  return { ...updatedPage, error: false };
 };
