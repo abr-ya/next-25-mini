@@ -7,6 +7,7 @@ import { SectionBox, SubmitButton } from "..";
 import { updateLinkPage } from "@linklist/_data/crudLinkPage";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { RadioToggle } from "./fields/radio-toggle";
 
 interface IPageSettingsFormProps {
   page: {
@@ -24,13 +25,14 @@ interface IPageSettingsFormProps {
 export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
   const router = useRouter();
 
-  const [bgType] = useState<"color" | "image">(page.bgType);
+  const [bgType, setBgType] = useState<"color" | "image">(page.bgType);
   const [bgColor, setBgColor] = useState<string>(page.bgColor);
   const [bgImage] = useState<string | null>(page.bgImage);
 
   const saveBaseSettings = async (formData: FormData) => {
     const payload = Object.fromEntries(formData);
-    const result = await updateLinkPage(page.id, payload);
+    const extendedPayload = { ...payload, bgType, bgColor, bgImage };
+    const result = await updateLinkPage(page.id, extendedPayload);
 
     console.log("result", result);
     if (!result.error) {
@@ -48,9 +50,18 @@ export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
           className="py-4 -m-4 min-h-[300px] flex justify-center items-center bg-cover bg-center"
           style={bgType === "color" ? { backgroundColor: bgColor } : { backgroundImage: `url(${bgImage})` }}
         >
-          <div>
+          <div className="w-[300px]">
+            <RadioToggle
+              defaultValue={bgType}
+              name={"bgType"}
+              onChange={(val) => setBgType(val as "color" | "image")}
+              options={[
+                { value: "color", icon: null, label: "Color" },
+                { value: "image", icon: null, label: "Image" },
+              ]}
+            />
             {bgType === "color" && (
-              <div className="bg-gray-200 shadow text-gray-700 p-2 mt-2">
+              <div className="bg-gray-200 shadow text-gray-700 p-2 h-[50px]">
                 <div className="flex gap-2 justify-center">
                   <span>Background color:</span>
                   <input
@@ -62,7 +73,7 @@ export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
                 </div>
               </div>
             )}
-            {bgType === "image" && <div className="flex justify-center">todo: image upload</div>}
+            {bgType === "image" && <div className="flex justify-center h-[50px]">todo: image upload</div>}
           </div>
         </div>
         <div className="flex justify-center -mb-12">

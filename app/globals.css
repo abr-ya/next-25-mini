@@ -129,5 +129,18 @@
   label.input-label{
       @apply uppercase text-gray-400 text-xs mb-2 font-semibold;
   }
+
+  .radio-togglers{
+    @apply p-1 bg-gray-200 inline-flex cursor-pointer;
+  }
+  .radio-togglers div{
+      @apply p-2 px-4 text-gray-500 block flex items-center gap-2 cursor-pointer;
+  }
+  .radio-togglers input[type="radio"]{
+      @apply hidden;
+  }
+  .radio-togglers input[type="radio"]:checked + div{
+      @apply bg-white text-blue-600;
+  }
 }
 /* /LinkList Part */
