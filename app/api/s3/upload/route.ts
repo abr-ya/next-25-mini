@@ -5,7 +5,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { z } from "zod";
 import { S3 } from "@/lib/s3-client";
 
-const uploeadRequestSchema = z.object({
+const uploadRequestSchema = z.object({
   filename: z.string(),
   contentType: z.string(),
   size: z.number(),
@@ -14,25 +14,26 @@ const uploeadRequestSchema = z.object({
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const validation = uploeadRequestSchema.safeParse(body);
+    const validation = uploadRequestSchema.safeParse(body);
 
     if (!validation.success) {
       return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
     }
 
-    const { filename, contentType, size } = validation.data;
+    const { filename, contentType } = validation.data;
+
+    console.log(filename, contentType);
 
     const uniqueKey = `${uuidv4()}-${filename}`;
 
     const command = new PutObjectCommand({
-      Bucket: "uploads-locale",
+      Bucket: process.env.S3_BUCKET_NAME!,
       Key: uniqueKey,
-      ContentType: contentType,
-      ContentLength: size,
+      // ContentType: contentType,
     });
 
     const presignedUrl = await getSignedUrl(S3, command, {
-      expiresIn: 360, // URL expires in 6 minutes
+      expiresIn: 3600, // URL expires in 60 minutes
     });
 
     const response = { presignedUrl, key: uniqueKey };

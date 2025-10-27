@@ -1,42 +1,97 @@
 "use client";
 
 import { useCallback, useState, useEffect } from "react";
-import { Loader2, Trash2 } from "lucide-react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 import { Button, Card, CardContent } from "@/components/index";
+import { IS3File } from "@linklist/_interfaces/file.interface";
+import { UploaderFilesList } from "./uploader-files-list";
 
 export const Uploader = () => {
-  const [files, setFiles] = useState<
-    Array<{
-      id: string;
-      file: File;
-      uploading: boolean;
-      progress: number;
-      key?: string;
-      isDeleting: boolean;
-      error: boolean;
-      objectUrl?: string;
-    }>
-  >([]);
-
-  const removeFile = (fileId: string) => {
-    console.log("removeFile", fileId);
-  };
+  const [files, setFiles] = useState<Array<IS3File>>([]);
 
   const uploadFile = async (file: File) => {
     setFiles((prevFiles) => prevFiles.map((f) => (f.file === file ? { ...f, uploading: true } : f)));
 
     try {
-      // 1. Get presigned URL
-      console.log(files);
+      // 1. Get presigned URL ==> our API route
+      const presignedResponse = await fetch("/api/s3/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename: file.name,
+          contentType: file.type,
+          size: file.size,
+        }),
+      });
+
+      if (!presignedResponse.ok) {
+        toast.error("Failed to get presigned URL");
+
+        setFiles((prevFiles) =>
+          prevFiles.map((f) => (f.file === file ? { ...f, uploading: false, progress: 0, error: true } : f)),
+        );
+
+        return;
+      }
+
+      const { presignedUrl, key } = await presignedResponse.json();
+      console.log("Presigned URL:", presignedUrl, "Key:", key);
+
       // 2. Upload file to S3
-    } catch {
+      await new Promise<void>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const percentComplete = (event.loaded / event.total) * 100;
+            setFiles((prevFiles) =>
+              prevFiles.map((f) => (f.file === file ? { ...f, progress: Math.round(percentComplete), key: key } : f)),
+            );
+          }
+        };
+
+        xhr.onload = () => {
+          if (xhr.status === 200 || xhr.status === 204) {
+            // 3. File fully uploaded - set progress to 100
+            const fileUrl = presignedUrl.split("?")[0];
+
+            setFiles((prevFiles) =>
+              prevFiles.map((f) =>
+                f.file === file ? { ...f, progress: 100, uploading: false, error: false, fileUrl } : f,
+              ),
+            );
+
+            toast.success("File uploaded successfully");
+            console.log("file", file.name, "uploaded to S3 with key:", key);
+            console.log("link to access:", fileUrl, "todo: save this to database");
+
+            resolve();
+          } else {
+            reject(new Error(`Upload failed with status: ${xhr.status}`));
+          }
+        };
+
+        xhr.onerror = (error) => {
+          console.log(error);
+          reject(new Error("Upload failed"));
+        };
+
+        xhr.open("PUT", presignedUrl);
+        xhr.setRequestHeader("Content-Type", file.type);
+        xhr.send(file);
+      });
+    } catch (error) {
       toast.error("Something went wrong");
-      // Set erorrs to state
+      console.log(error);
+
+      // Set errors to state
+      setFiles((prevFiles) =>
+        prevFiles.map((f) => (f.file === file ? { ...f, uploading: false, progress: 0, error: true } : f)),
+      );
     }
   };
 
@@ -60,21 +115,24 @@ export const Uploader = () => {
     }
   };
 
-  const rejectedFiles = useCallback((fileRejection: FileRejection[]) => {
+  const onDropRejected = useCallback((fileRejection: FileRejection[]) => {
     if (fileRejection.length) {
-      const toomanyFiles = fileRejection.find((rejection) => rejection.errors[0].code === "too-many-files");
+      // todo: handle multiple errors!
+      console.log("onDropRejected");
+      fileRejection.forEach((rej) => console.log(rej.errors));
 
+      // not the best way to handle it, but works
+      const toomanyFiles = fileRejection.find((rejection) => rejection.errors[0].code === "too-many-files");
       const fileSizetoBig = fileRejection.find((rejection) => rejection.errors[0].code === "file-too-large");
 
       if (toomanyFiles) toast.error("Too many files selected, max is 5");
-
       if (fileSizetoBig) toast.error("File size exceeds 5mb limit");
     }
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    onDropRejected: rejectedFiles,
+    onDropRejected,
     maxFiles: 5,
     maxSize: 1024 * 1024 * 5, // 5mb todo: make configurable, move to common
     accept: {
@@ -115,40 +173,7 @@ export const Uploader = () => {
         </CardContent>
       </Card>
 
-      {files.length > 0 && (
-        <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
-          {files.map(({ id, file, uploading, progress, isDeleting, error, objectUrl }) => {
-            return (
-              <div key={id} className="flex flex-col gap-1">
-                <div className="relative aspect-square rounded-lg overflow-hidden">
-                  <img src={objectUrl} alt={file.name} className="w-full h-full object-cover" />
-
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    className="absolute top-2 right-2"
-                    onClick={() => removeFile(id)}
-                    disabled={isDeleting}
-                  >
-                    {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-                  </Button>
-                  {uploading && !isDeleting && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                      <div className="text-white font-medium text-lg">{progress}%</div>
-                    </div>
-                  )}
-                  {error && (
-                    <div className="absolute inset-0 bg-red-500/50 flex items-center justify-center">
-                      <div className="text-white font-medium">Error</div>
-                    </div>
-                  )}
-                </div>
-                <p className="text-sm text-muted-foreground truncate px-1">{file.name}</p>
-              </div>
-            );
-          })}
-        </div>
-      )}
+      {files.length > 0 && <UploaderFilesList files={files} />}
     </>
   );
 };
