@@ -24,6 +24,13 @@ export const AdminSidebar = () => {
         <LinkIcon size={24} />
         <span className="">Analytics</span>
       </Link>
+      <Link
+        href={"/linklist/files"}
+        className={"flex gap-4 p-2 " + (path === "/linklist/files" ? "text-blue-500" : "")}
+      >
+        <LinkIcon size={24} />
+        <span className="">My Files</span>
+      </Link>
       <Link href={"/linklist/"} className="flex items-center gap-2 text-xs text-gray-500 border-t pt-4">
         <LinkIcon size={24} />
         <span>Back to website</span>

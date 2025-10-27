@@ -1,4 +1,5 @@
 export { LoginButtons } from "./common/login-buttons";
+export { Uploader } from "./common/uploader";
 
 export { SubmitButton } from "./buttons/SubmitButton";
 
