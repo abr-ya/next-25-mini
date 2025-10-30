@@ -9,4 +9,5 @@ export { SectionBox } from "./layout/section-box";
 
 export { HeroForm } from "./forms/hero-form";
 export { PageSettingsForm } from "./forms/page-settings-form";
+export { PageLinksForm } from "./forms/page-links-form";
 export { UsernameForm } from "./forms/username-form";

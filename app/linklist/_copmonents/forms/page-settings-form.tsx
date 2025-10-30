@@ -8,18 +8,10 @@ import { updateLinkPage } from "@linklist/_data/crudLinkPage";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { RadioToggle } from "./fields/radio-toggle";
+import { ILinkPage } from "@linklist/_interfaces/link-page.interface";
 
 interface IPageSettingsFormProps {
-  page: {
-    id: number;
-    bgType: "color" | "image";
-    bgColor: string;
-    bgImage: string | null;
-    userImage: string | null;
-    displayName: string | null;
-    location: string | null;
-    bio: string | null;
-  };
+  page: ILinkPage;
 }
 
 export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
@@ -47,7 +39,7 @@ export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
     <SectionBox>
       <form action={saveBaseSettings}>
         <div
-          className="py-4 -m-4 min-h-[300px] flex justify-center items-center bg-cover bg-center"
+          className="py-4 -m-4 min-h-[360px] flex justify-center items-center bg-cover bg-center"
           style={bgType === "color" ? { backgroundColor: bgColor } : { backgroundImage: `url(${bgImage})` }}
         >
           <div className="w-[300px]">
@@ -73,7 +65,7 @@ export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
                 </div>
               </div>
             )}
-            {bgType === "image" && <div className="flex justify-center h-[50px]">todo: image upload</div>}
+            {bgType === "image" && <div className="flex justify-center h-[50px]">todo: image select</div>}
           </div>
         </div>
         <div className="flex justify-center -mb-12">

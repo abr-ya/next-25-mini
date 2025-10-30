@@ -1,4 +1,4 @@
-import { PageSettingsForm, UsernameForm } from "../../_copmonents/index";
+import { PageLinksForm, PageSettingsForm, UsernameForm } from "../../_copmonents/index";
 import { getLastLinkPage } from "../../_data/crudLinkPage";
 
 interface IAccountPage {
@@ -26,7 +26,12 @@ const AccountPage = async ({ searchParams }: IAccountPage) => {
     );
   }
 
-  return <PageSettingsForm page={page} />;
+  return (
+    <>
+      <PageSettingsForm page={page} />
+      <PageLinksForm data={[]} />
+    </>
+  );
 };
 
 export default AccountPage;
