@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ReactSortable } from "react-sortablejs";
 import { toast } from "sonner";
-import { CirclePlus, GripHorizontal, Save } from "lucide-react";
+import { CirclePlus, GripHorizontal, Save, Trash2 } from "lucide-react";
 
 import { SectionBox } from "../layout/section-box";
 import { SubmitButton } from "../buttons/SubmitButton";
@@ -73,6 +73,10 @@ export const PageLinksForm = ({ data, pageId }: IPageLinksFormProps) => {
     }
   };
 
+  const removeLinkHandler = (id: number) => {
+    console.log("remove", id);
+  };
+
   return (
     <SectionBox>
       <form action={saveLinksHandler}>
@@ -127,6 +131,14 @@ export const PageLinksForm = ({ data, pageId }: IPageLinksFormProps) => {
                     </Link>
                   </div>
                 )}
+                <button
+                  onClick={() => removeLinkHandler(l.id)}
+                  type="button"
+                  className="bg-gray-300 px-3 h-full flex gap-2 items-center justify-center cursor-pointer rounded"
+                >
+                  <Trash2 size={18} />
+                  <span>Remove this link</span>
+                </button>
               </div>
             ))}
           </ReactSortable>
