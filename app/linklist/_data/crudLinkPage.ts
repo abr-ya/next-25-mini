@@ -3,7 +3,7 @@
 import { neon } from "@/db";
 import { linkItemsTable, linkPagesTable } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
-import { and, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq } from "drizzle-orm";
 import { IUpdateLinkPage } from "../_interfaces/link-page.interface";
 
 export const createLinkPage = async (formData: FormData) => {
@@ -57,7 +57,7 @@ export const getLastLinkPage = async () => {
     .select()
     .from(linkItemsTable)
     .where(eq(linkItemsTable.pageId, page.id))
-    .orderBy(desc(linkItemsTable.createdAt));
+    .orderBy(asc(linkItemsTable.order));
 
   return { ...page, links };
 };

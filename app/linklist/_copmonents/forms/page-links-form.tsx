@@ -1,12 +1,15 @@
 "use client";
 
-import { CirclePlus, Save } from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
+import { ReactSortable } from "react-sortablejs";
+import { toast } from "sonner";
+import { CirclePlus, GripHorizontal, Save } from "lucide-react";
+
 import { SectionBox } from "../layout/section-box";
 import { SubmitButton } from "../buttons/SubmitButton";
 import { IAppLink } from "@linklist/_interfaces/link.interface";
-import { useState } from "react";
-import { createLink } from "../../_data/crudLink";
-import Link from "next/link";
+import { createLink, updateLinksOrder } from "@linklist/_data/crudLink";
 
 interface IPageLinksFormProps {
   data: IAppLink[];
@@ -15,10 +18,16 @@ interface IPageLinksFormProps {
 
 interface IFormLink extends IAppLink {
   isNew?: boolean;
-} // Omit<ILink, "id">
+}
 
 export const PageLinksForm = ({ data, pageId }: IPageLinksFormProps) => {
   const [links, setLinks] = useState<IFormLink[]>(data || []);
+
+  const dragHandler = (orderedLinks: IFormLink[]) => {
+    console.log(orderedLinks);
+    const newLinks = orderedLinks.map((link, index) => ({ ...link, order: index }));
+    setLinks(newLinks);
+  };
 
   const newLinkHandler = () => {
     console.log("Add new link");
@@ -40,20 +49,28 @@ export const PageLinksForm = ({ data, pageId }: IPageLinksFormProps) => {
   };
 
   const saveLinksHandler = async () => {
-    console.log("Saving links:", links);
     const newLinks = links.filter((l) => l.isNew);
-    console.log("New links to create:", newLinks);
+    const updatedLinks = links.filter((l) => !l.isNew).map(({ id, order }) => ({ id, order }));
 
     // Create new links
-    const createdLinks = await Promise.all(
+    console.log("New links to create:", newLinks);
+    const result1 = await Promise.all(
       newLinks.map((link) =>
         createLink({ title: link.title, url: link.url, description: link.description, order: link.order }, pageId),
       ),
     );
-
-    console.log(createdLinks);
+    console.log(result1);
+    setLinks((prev) => prev.map((l) => ({ ...l, isNew: false })));
 
     // Update existing links
+    // todo: optimize to avoid updating links that didn't change order!
+    console.log("Existing links to update:", updatedLinks);
+    const result2 = await updateLinksOrder(updatedLinks);
+    console.log(result2);
+
+    if (!result2.error) {
+      toast.success("LinkPage has been updated!"); // todo: Green theme!
+    }
   };
 
   return (
@@ -69,26 +86,29 @@ export const PageLinksForm = ({ data, pageId }: IPageLinksFormProps) => {
           <span>Add new</span>
         </button>
         <div>
-          {links.map((l) => (
-            <div key={l.id} className="mt-2 md:flex gap-6 items-center">
-              {l.isNew ? (
-                <div className="grow">
-                  <label className="input-label">Title:</label>
-                  <input
-                    value={l.title}
-                    onChange={(ev) => changeLink(l.id, "title", ev.target.value)}
-                    type="text"
-                    placeholder="title"
-                    required
-                  />
-                  <label className="input-label">Description:</label>
-                  <input
-                    value={l.description || ""}
-                    onChange={(ev) => changeLink(l.id, "description", ev.target.value)}
-                    type="text"
-                    placeholder="description (optional)"
-                  />
-                  <div className="flex items-center gap-4">
+          <ReactSortable handle={".handle"} list={links} setList={dragHandler}>
+            {links.map((l) => (
+              <div key={l.id} className="mt-2 md:flex gap-4 items-center">
+                <div className="handle text-gray-500 cursor-move">
+                  <GripHorizontal />
+                </div>
+                {l.isNew ? (
+                  <div className="grow">
+                    <label className="input-label">Title:</label>
+                    <input
+                      value={l.title}
+                      onChange={(ev) => changeLink(l.id, "title", ev.target.value)}
+                      type="text"
+                      placeholder="title"
+                      required
+                    />
+                    <label className="input-label">Description:</label>
+                    <input
+                      value={l.description || ""}
+                      onChange={(ev) => changeLink(l.id, "description", ev.target.value)}
+                      type="text"
+                      placeholder="description (optional)"
+                    />
                     <div className="grow">
                       <label className="input-label">URL:</label>
                       <input
@@ -99,28 +119,22 @@ export const PageLinksForm = ({ data, pageId }: IPageLinksFormProps) => {
                         required
                       />
                     </div>
-                    <div>
-                      <SubmitButton>
-                        <Save />
-                        <span>Save</span>
-                      </SubmitButton>
-                    </div>
                   </div>
-                </div>
-              ) : (
-                <div className="grow">
-                  <Link href={l.url} target="_blank" className="text-blue-500 underline">
-                    {l.title}
-                  </Link>
-                </div>
-              )}
-            </div>
-          ))}
+                ) : (
+                  <div className="grow">
+                    <Link href={l.url} target="_blank" className="text-blue-500 underline">
+                      {l.title}
+                    </Link>
+                  </div>
+                )}
+              </div>
+            ))}
+          </ReactSortable>
         </div>
         <div className="max-w-[200px] mx-auto">
           <SubmitButton>
             <Save />
-            <span>Save (order?)</span>
+            <span>Save</span>
           </SubmitButton>
         </div>
       </form>

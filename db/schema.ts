@@ -46,13 +46,13 @@ export const linkPagesTable = pgTable("link_pages", {
 
 export const linkItemsTable = pgTable("link_items", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  order: integer("sort_order").notNull().default(0),
   pageId: integer("page_id")
     .references(() => linkPagesTable.id)
     .notNull(),
   title: text().notNull(),
   url: text().notNull(),
   description: text(),
-  order: integer().notNull().default(0),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")
     .default(sql`CURRENT_TIMESTAMP`)
