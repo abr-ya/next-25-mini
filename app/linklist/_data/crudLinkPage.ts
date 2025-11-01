@@ -1,7 +1,7 @@
 "use server";
 
 import { neon } from "@/db";
-import { linkPagesTable } from "@/db/schema";
+import { linkItemsTable, linkPagesTable } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { and, desc, eq } from "drizzle-orm";
 import { IUpdateLinkPage } from "../_interfaces/link-page.interface";
@@ -44,25 +44,22 @@ export const getLastLinkPage = async () => {
   if (!userId) return false; // add message?
 
   const pages = await neon
-    .select({
-      id: linkPagesTable.id,
-      userId: linkPagesTable.userId,
-      url: linkPagesTable.url,
-      bgType: linkPagesTable.bgType,
-      bgColor: linkPagesTable.bgColor,
-      bgImage: linkPagesTable.bgImage,
-      userImage: linkPagesTable.userImage,
-      displayName: linkPagesTable.displayName,
-      location: linkPagesTable.location,
-      bio: linkPagesTable.bio,
-      createdAt: linkPagesTable.createdAt,
-    })
+    .select()
     .from(linkPagesTable)
     .where(eq(linkPagesTable.userId, userId))
     .orderBy(desc(linkPagesTable.createdAt))
     .limit(1);
 
-  return pages[0];
+  const page = pages[0];
+  if (!page) return false; // add message?
+
+  const links = await neon
+    .select()
+    .from(linkItemsTable)
+    .where(eq(linkItemsTable.pageId, page.id))
+    .orderBy(desc(linkItemsTable.createdAt));
+
+  return { ...page, links };
 };
 
 export const updateLinkPage = async (id: number, data: IUpdateLinkPage) => {

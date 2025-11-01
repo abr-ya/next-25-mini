@@ -29,7 +29,7 @@ const AccountPage = async ({ searchParams }: IAccountPage) => {
   return (
     <>
       <PageSettingsForm page={page} />
-      <PageLinksForm data={[]} />
+      <PageLinksForm data={page.links} pageId={page.id} />
     </>
   );
 };

@@ -3,18 +3,21 @@
 import { CirclePlus, Save } from "lucide-react";
 import { SectionBox } from "../layout/section-box";
 import { SubmitButton } from "../buttons/SubmitButton";
-import { ILink } from "@linklist/_interfaces/link.interface";
+import { IAppLink } from "@linklist/_interfaces/link.interface";
 import { useState } from "react";
+import { createLink } from "../../_data/crudLink";
+import Link from "next/link";
 
 interface IPageLinksFormProps {
-  data: ILink[];
+  data: IAppLink[];
+  pageId: number;
 }
 
-interface IFormLink extends ILink {
+interface IFormLink extends IAppLink {
   isNew?: boolean;
 } // Omit<ILink, "id">
 
-export const PageLinksForm = ({ data }: IPageLinksFormProps) => {
+export const PageLinksForm = ({ data, pageId }: IPageLinksFormProps) => {
   const [links, setLinks] = useState<IFormLink[]>(data || []);
 
   const newLinkHandler = () => {
@@ -32,12 +35,25 @@ export const PageLinksForm = ({ data }: IPageLinksFormProps) => {
     ]);
   };
 
-  const changeLink = (id: number, field: keyof ILink, value: string) => {
+  const changeLink = (id: number, field: keyof IFormLink, value: string) => {
     setLinks((prev) => prev.map((l) => (l.id === id ? { ...l, [field]: value } : l)));
   };
 
   const saveLinksHandler = async () => {
     console.log("Saving links:", links);
+    const newLinks = links.filter((l) => l.isNew);
+    console.log("New links to create:", newLinks);
+
+    // Create new links
+    const createdLinks = await Promise.all(
+      newLinks.map((link) =>
+        createLink({ title: link.title, url: link.url, description: link.description, order: link.order }, pageId),
+      ),
+    );
+
+    console.log(createdLinks);
+
+    // Update existing links
   };
 
   return (
@@ -54,7 +70,7 @@ export const PageLinksForm = ({ data }: IPageLinksFormProps) => {
         </button>
         <div>
           {links.map((l) => (
-            <div key={l.id} className="mt-8 md:flex gap-6 items-center">
+            <div key={l.id} className="mt-2 md:flex gap-6 items-center">
               {l.isNew ? (
                 <div className="grow">
                   <label className="input-label">Title:</label>
@@ -83,11 +99,20 @@ export const PageLinksForm = ({ data }: IPageLinksFormProps) => {
                         required
                       />
                     </div>
-                    <div>Save Button?</div>
+                    <div>
+                      <SubmitButton>
+                        <Save />
+                        <span>Save</span>
+                      </SubmitButton>
+                    </div>
                   </div>
                 </div>
               ) : (
-                <div className="grow">oldLink</div>
+                <div className="grow">
+                  <Link href={l.url} target="_blank" className="text-blue-500 underline">
+                    {l.title}
+                  </Link>
+                </div>
               )}
             </div>
           ))}
