@@ -1,7 +1,7 @@
 import { ButtonLink } from "../../_components";
 import { HeroForm } from "../_copmonents/index";
 
-const LinksPage = () => (
+const LandingPage = () => (
   <section className="pt-32">
     <div className="max-w-md mb-4">
       <h1 className="text-6xl font-bold">
@@ -20,4 +20,4 @@ const LinksPage = () => (
   </section>
 );
 
-export default LinksPage;
+export default LandingPage;

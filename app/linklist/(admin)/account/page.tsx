@@ -15,8 +15,6 @@ const AccountPage = async ({ searchParams }: IAccountPage) => {
 
   const page = await getLastLinkPage();
 
-  console.log("page", page);
-
   if (!page) {
     return (
       <div>

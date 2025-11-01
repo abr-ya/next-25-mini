@@ -80,7 +80,7 @@ export const PageLinksForm = ({ data, pageId }: IPageLinksFormProps) => {
   return (
     <SectionBox>
       <form action={saveLinksHandler}>
-        <h2 className="text-2xl font-bold mb-4">Links</h2>
+        <h2 className="text-xl font-bold mb-4">My Links</h2>
         <button
           onClick={newLinkHandler}
           type="button"
@@ -146,7 +146,7 @@ export const PageLinksForm = ({ data, pageId }: IPageLinksFormProps) => {
         <div className="max-w-[200px] mx-auto">
           <SubmitButton>
             <Save />
-            <span>Save</span>
+            <span>Save Links</span>
           </SubmitButton>
         </div>
       </form>

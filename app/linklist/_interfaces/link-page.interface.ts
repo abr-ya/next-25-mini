@@ -1,5 +1,6 @@
 export interface ILinkPage {
   id: number;
+  url: string;
   bgType: "color" | "image";
   bgColor: string;
   bgImage: string | null;

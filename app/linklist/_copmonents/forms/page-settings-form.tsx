@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { RadioToggle } from "./fields/radio-toggle";
 import { ILinkPage } from "@linklist/_interfaces/link-page.interface";
+import { LinkIcon, Save } from "lucide-react";
+import Link from "next/link";
 
 interface IPageSettingsFormProps {
   page: ILinkPage;
@@ -39,9 +41,14 @@ export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
     <SectionBox>
       <form action={saveBaseSettings}>
         <div
-          className="py-4 -m-4 min-h-[360px] flex justify-center items-center bg-cover bg-center"
+          className="py-4 -m-4 min-h-[360px] flex justify-center items-center bg-cover bg-center relative"
           style={bgType === "color" ? { backgroundColor: bgColor } : { backgroundImage: `url(${bgImage})` }}
         >
+          <div className="absolute top-1 left-1 w-8 h-8 cursor-pointer flex justify-center items-center border-2 border-white rounded opacity-60 hover:opacity-100">
+            <Link href={`/linklist/${page.url}`} className="flex gap-4 p-2 text-blue-500 z-50">
+              <LinkIcon size={24} />
+            </Link>
+          </div>
           <div className="w-[300px]">
             <RadioToggle
               defaultValue={bgType}
@@ -68,14 +75,15 @@ export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
             {bgType === "image" && <div className="flex justify-center h-[50px]">todo: image select</div>}
           </div>
         </div>
-        <div className="flex justify-center -mb-12">
-          <div className="relative -top-8 w-[128px] h-[128px]">
+        <div className="flex justify-center -mb-16">
+          <div className="relative -top-14 w-[128px] h-[128px]">
             <div className="overflow-hidden h-full rounded-full border-4 border-white shadow shadow-black/50">
               <Image className="w-full h-full object-cover" src={avatar} alt={"avatar"} width={128} height={128} />
             </div>
           </div>
         </div>
         <div className="p-0">
+          <h2 className="text-xl font-bold mb-2">About me</h2>
           <label className="input-label" htmlFor="nameIn">
             Display name
           </label>
@@ -101,7 +109,10 @@ export const PageSettingsForm = ({ page }: IPageSettingsFormProps) => {
           </label>
           <textarea name="bio" defaultValue={page.bio || ""} id="bioIn" placeholder="Your bio goes here..." />
           <div className="max-w-[200px] mx-auto">
-            <SubmitButton>Save Settings</SubmitButton>
+            <SubmitButton>
+              <Save />
+              Save Settings
+            </SubmitButton>
           </div>
         </div>
       </form>
