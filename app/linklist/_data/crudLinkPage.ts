@@ -62,6 +62,12 @@ export const getLastLinkPage = async () => {
   return { ...page, links };
 };
 
+export const getLinkPageByUrl = async (url: string) => {
+  const pageResult = await neon.select().from(linkPagesTable).where(eq(linkPagesTable.url, url)).limit(1);
+
+  return pageResult?.length ? pageResult[0] : null;
+};
+
 export const updateLinkPage = async (id: number, data: IUpdateLinkPage) => {
   const { userId } = await auth();
 
